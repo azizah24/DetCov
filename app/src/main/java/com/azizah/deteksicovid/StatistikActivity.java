@@ -57,10 +57,15 @@ public class StatistikActivity extends AppCompatActivity {
         rcdata = findViewById(R.id.recystat);
         rcdata.setLayoutManager(new LinearLayoutManager(this,  RecyclerView.VERTICAL, false));
 
-        adapterData = new AdapterData(this);
-        rcdata.setAdapter(adapterData);
+
+        statList = new ArrayList<>();
+
+        rcdata = findViewById(R.id.recystat);
+        rcdata.setLayoutManager(new LinearLayoutManager(this));
+
+        // adapterData = new AdapterData(this, dataArrayList);
         //rcdata.setAdapter(adapterData);
-        //rcdata.setHasFixedSize(true);
+        rcdata.setHasFixedSize(true);
         progressBar.setVisibility(View.GONE);
 
         prosesdata();
@@ -75,7 +80,8 @@ public class StatistikActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 try{
-                    adapterData.filterData(charSequence.toString());
+                    adapterData.getFilter().filter(charSequence);
+                    adapterData.notifyDataSetChanged();
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -96,8 +102,8 @@ public class StatistikActivity extends AppCompatActivity {
         });
 
         final PopupMenu popupMenu = new PopupMenu(this, item);
-        popupMenu.getMenu().add(Menu.NONE,0,0,"Naik");
-        popupMenu.getMenu().add(Menu.NONE,1,1, "Turun");
+        popupMenu.getMenu().add(Menu.NONE,0,0,"A-Z");
+        popupMenu.getMenu().add(Menu.NONE,1,1, "Z-A");
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -124,42 +130,57 @@ public class StatistikActivity extends AppCompatActivity {
 
     }
 
-
     private void prosesdata(){
 
-       // progressBar.setVisibility(View.VISIBLE);
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://api.covid19api.com/summary";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, STATS_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                try {
-                    JSONArray array = new JSONObject(response).getJSONArray("Countries");
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    bindDataToView(gson.fromJson(array.toString(), ModelData[].class));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+                handlerespon(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(StatistikActivity.this, "Ups!!! Something error", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
+                Toast.makeText(StatistikActivity.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-        queue.add(stringRequest);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
     }
 
-    private void bindDataToView(ModelData[] fromJson) {
-        for (ModelData item : fromJson) {
-            adapterData.addItem(item);
+    private void handlerespon(String response) {
+
+        statList = new ArrayList<>();
+        statList.clear();
+
+        try{
+
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("Countries");
+
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.setDateFormat("dd/MM/yyyy hh:mm a");
+            Gson gson = gsonBuilder.create();
+
+            for (int i=0; i<jsonArray.length(); i++){
+                ModelData modelData = gson.fromJson(jsonArray.getJSONObject(i).toString(), ModelData.class);
+
+                statList.add(modelData);
+            }
+
+            adapterData = new AdapterData(StatistikActivity.this, statList);
+            rcdata.setAdapter(adapterData);
+            adapterData.notifyDataSetChanged();
+            progressBar.setVisibility(View.GONE);
+
+        }
+        catch (Exception e){
+            Toast.makeText(StatistikActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
-
 
 
     public class Naik implements Comparator<ModelData>{

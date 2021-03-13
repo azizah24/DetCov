@@ -3,24 +3,23 @@ package com.azizah.deteksicovid;
 public class ModelData {
 
 
-    String Country, CountryCode, Slug, NewConfirmed, TotalConfirmed, NewDeaths,
+    String Country, NewConfirmed, TotalConfirmed, NewDeaths,
     TotalDeaths, NewRecovered, TotalRecovered, Date;
 
-    public ModelData() {
-    }
 
-    public ModelData(String country, String countryCode, String slug, String newConfirmed, String totalConfirmed, String newDeaths, String totalDeaths, String newRecovered, String totalRecovered, String date) {
+    public ModelData(String country, String totalConfirmed, String newConfirmed, String totalDeaths, String newDeaths, String totalRecovered, String newRecovered) {
+
         Country = country;
-        CountryCode = countryCode;
-        Slug = slug;
         NewConfirmed = newConfirmed;
         TotalConfirmed = totalConfirmed;
         NewDeaths = newDeaths;
         TotalDeaths = totalDeaths;
         NewRecovered = newRecovered;
         TotalRecovered = totalRecovered;
-        Date = date;
+
+
     }
+
 
     public String getCountry() {
         return Country;
@@ -28,22 +27,6 @@ public class ModelData {
 
     public void setCountry(String country) {
         Country = country;
-    }
-
-    public String getCountryCode() {
-        return CountryCode;
-    }
-
-    public void setCountryCode(String countryCode) {
-        CountryCode = countryCode;
-    }
-
-    public String getSlug() {
-        return Slug;
-    }
-
-    public void setSlug(String slug) {
-        Slug = slug;
     }
 
     public String getNewConfirmed() {
@@ -94,11 +77,5 @@ public class ModelData {
         TotalRecovered = totalRecovered;
     }
 
-    public String getDate() {
-        return Date;
-    }
 
-    public void setDate(String date) {
-        Date = date;
-    }
 }

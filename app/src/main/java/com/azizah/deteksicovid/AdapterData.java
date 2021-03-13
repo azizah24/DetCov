@@ -19,29 +19,10 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.RecyclerHolder
     public ArrayList<ModelData> statList, filter;
     private Searchdata searchdata;
 
-    public AdapterData(Context context) {
+    public AdapterData(Context context, ArrayList<ModelData> statList) {
         this.context = context;
-        this.statList = new ArrayList<>();
-        this.filter = new ArrayList<>();
-    }
-
-    public void addItem(ModelData model) {
-        this.statList.add(model);
-        this.filter.add(model);
-        notifyItemInserted(this.statList.size() -1);
-    }
-
-    public void updateItem(ModelData model, int position) {
-        this.statList.set(position, model);
-        this.filter.set(position, model);
-        notifyItemChanged(position);
-    }
-
-    public void deleteItem(int position) {
-        this.statList.remove(position);
-        this.filter.remove(position);
-        notifyItemRemoved(position);
-        notifyItemMoved(position, this.statList.size() - 1);
+        this.statList = statList;
+        this.filter = statList;
     }
 
     @NonNull
@@ -78,24 +59,12 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.RecyclerHolder
 
     @Override
     public int getItemCount() {
-        return statList.size();
-    }
-
-    public void filterData(String keyWord) {
-        if (keyWord.length() == 0) {
-            this.statList = this.filter;
-            notifyDataSetChanged();
-        } else {
-            this.statList= new ArrayList<>();
-            for (ModelData item : this.filter) {
-                // filter here
-                if (item.toString().toLowerCase().contains(keyWord.toLowerCase())) {
-                    this.statList.add(item);
-                }
-            }
-            notifyDataSetChanged();
+        if (statList == null) return 0;
+        else {
+            return statList.size();
         }
     }
+
 
     @Override
     public Filter getFilter() {
@@ -114,12 +83,12 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.RecyclerHolder
             super(itemView);
 
             negara = itemView.findViewById(R.id.negara);
-            totalpositif = itemView.findViewById(R.id.negara);
-            positifbaru = itemView.findViewById(R.id.negara);
-            totalmati = itemView.findViewById(R.id.negara);
-            matihariini = itemView.findViewById(R.id.negara);
-            totalsembuh = itemView.findViewById(R.id.negara);
-            sembuhhariini = itemView.findViewById(R.id.negara);
+            totalpositif = itemView.findViewById(R.id.totalpositif);
+            positifbaru = itemView.findViewById(R.id.positifhariini);
+            totalmati = itemView.findViewById(R.id.totalmati);
+            matihariini = itemView.findViewById(R.id.matihariini);
+            totalsembuh = itemView.findViewById(R.id.totalsembuh);
+            sembuhhariini = itemView.findViewById(R.id.sembuhhariini);
 
         }
     }
