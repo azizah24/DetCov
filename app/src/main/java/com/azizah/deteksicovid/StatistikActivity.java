@@ -36,7 +36,7 @@ import java.util.Comparator;
 
 public class StatistikActivity extends AppCompatActivity {
 
-    ImageView back, item;
+    ImageView back, item, refrsh;
     EditText etedit;
     private Context context;
     private ProgressBar progressBar;
@@ -54,8 +54,19 @@ public class StatistikActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progresbar);
         etedit = findViewById(R.id.etedit);
         item = findViewById(R.id.itm);
+        refrsh = findViewById(R.id.btnrefresh);
+        refrsh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
+            }
+        });
+
         rcdata = findViewById(R.id.recystat);
-        rcdata.setLayoutManager(new LinearLayoutManager(this,  RecyclerView.VERTICAL, false));
+        rcdata.setLayoutManager(new LinearLayoutManager(this));
 
 
         statList = new ArrayList<>();
