@@ -1,7 +1,6 @@
 # Deteksi Covid
 
-Aplikasi Media Sosial realtime untuk berinteraksi menggunakan firebase.
-dengan menu :
+Aplikasi Deteksi Covid untuk melihat gejala yang diinputkan dengan menu :
 - Menu Spalsh screen
 - Menu Home 
 - Menu Apa Itu Covid-19
